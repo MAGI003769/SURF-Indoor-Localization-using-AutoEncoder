@@ -21,6 +21,7 @@
 		<td bgcolor="#DDEEFF"><p class="normal"><b>Date Donated</b></p></td>
 		<td><p class="normal">2014-09-18</p></td>
 	</tr>
+	
 	<tr>
 		<td bgcolor="#DDEEFF"><p class="normal"><b>Associated Tasks:</b></p></td>
 		<td><p class="normal">Classification, Regression</p></td>
