@@ -30,13 +30,7 @@
 		<td bgcolor="#DDEEFF"><p class="normal"><b>Number of Web Hits:</b></p></td>
 		<td><p class="normal">36684</p></td>
 	</tr>
-	<!--
-	<tr>
-		<td bgcolor="#DDEEFF"><p class="normal"><b>Highest Percentage Achieved:&nbsp;&nbsp;</b></p></td>
-		<td><p class="normal">N/A</p></td>
-	</tr>
-	-->
-</table>
+<table>
 
 
 <br />
