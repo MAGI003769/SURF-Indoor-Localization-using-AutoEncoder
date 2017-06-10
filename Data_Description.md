@@ -32,7 +32,6 @@
 	</tr>
 	<!--
 	<tr>
-		
 		<td bgcolor="#DDEEFF"><p class="normal"><b>Highest Percentage Achieved:&nbsp;&nbsp;</b></p></td>
 		<td><p class="normal">N/A</p></td>
 	</tr>
