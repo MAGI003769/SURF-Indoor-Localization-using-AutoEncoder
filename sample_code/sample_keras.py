@@ -26,9 +26,13 @@ building_floors_str = train_df["FLOOR"].map(str) #convert all the building floor
 
 res = building_ids_str + building_floors_str #element wise concatenation of BUILDINGID+FLOOR
 train_labels = np.asarray(building_ids_str + building_floors_str)
-
+print('Building ID: \n', building_ids_str)
+print('Floor ID: \n', building_floors_str)
+print('Res', res)
+print('train_labels: \n', train_labels)
 #convert labels to categorical variables, dummy_labels has type 'pandas.core.frame.DataFrame'
 dummy_labels = pd.get_dummies(train_labels)
+print('dummy_lables: \n', dummy_labels)
 
 
 """one hot encode the dummy_labels.
@@ -107,3 +111,5 @@ c.fit(train_X, train_y, validation_data=(val_X, val_y), epochs=nb_epochs, batch_
 loss, acc = c.evaluate(test_AP_features, test_labels)
 
 print('\n', loss, acc)
+
+
