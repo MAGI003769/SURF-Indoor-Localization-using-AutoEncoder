@@ -1,0 +1,46 @@
+[user]
+    name = Kyeong Soo (Joseph) Kim
+    email = kyeongsoo.kim@gmail.com
+[branch]
+    autosetupmerge = true
+[core]
+    autocrlf = input
+    editor = vim
+[web]
+    browser = elinks
+[push]
+    default = current
+[sendemail]
+    smtpencryption = tls
+    smtpserver = smtp.gmail.com
+    smtpuser = kyeongsoo.kim@gmail.com
+    smtpserverport = 587
+[color]
+    branch = auto
+    diff = auto
+    status = auto
+    ui = true
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red
+    new = cyan
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[alias]
+    al = config --get-regexp alias
+    br = branch
+    ci = commit
+    co = checkout
+    df = diff
+    lg = log --pretty=format:'%Cred%h%Creset -%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+    purr = pull --rebase
+    ready = rebase -i @{u}
+    st = status -sb
+    standup = log --pretty=format:'%Cred%h%Creset -%Creset %s %Cgreen(%cD) %C(bold blue)<%an>%Creset' --since yesterday --author joe
