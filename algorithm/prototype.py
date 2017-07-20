@@ -8,7 +8,7 @@ features = scale(np.asarray(dataset.ix[:,0:520]))
 labels = np.asarray(dataset["BUILDINGID"].map(str) + dataset["FLOOR"].map(str))
 labels = np.asarray(pd.get_dummies(labels))
 
-train_val_split = np.random.rand(len(features)) < 0.80
+train_val_split = np.random.rand(len(features)) < 0.90
 train_x = features[train_val_split]
 train_y = labels[train_val_split]
 val_x = features[~train_val_split]
@@ -90,7 +90,8 @@ def decode(x):
 
 def dnn(x):
     l1 = tf.nn.tanh(tf.add(tf.matmul(x,dnn_weights_h1),dnn_biases_h1))
-    l2 = tf.nn.tanh(tf.add(tf.matmul(l1,dnn_weights_h2),dnn_biases_h2))
+    dropout = tf.nn.dropout(l1, 0.5)
+    l2 = tf.nn.tanh(tf.add(tf.matmul(dropout,dnn_weights_h2),dnn_biases_h2))
     out = tf.nn.softmax(tf.add(tf.matmul(l2,dnn_weights_out),dnn_biases_out))
     return out
 
@@ -100,8 +101,8 @@ y_ = dnn(encoded)
 
 us_cost_function = tf.reduce_mean(tf.pow(X - decoded, 2))
 s_cost_function = -tf.reduce_sum(Y * tf.log(y_))
-us_optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(us_cost_function)
-s_optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(s_cost_function)
+us_optimizer = tf.train.AdamOptimizer(learning_rate/10).minimize(us_cost_function)
+s_optimizer = tf.train.AdagradOptimizer(learning_rate).minimize(s_cost_function)
 
 correct_prediction = tf.equal(tf.argmax(y_,1), tf.argmax(Y,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
