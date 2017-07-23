@@ -84,7 +84,7 @@ conv2_weight = weight_variable([conv_kernel, conv_kernel, conv1_features, conv2_
 conv2_bias = bias_variable([conv2_features])
 
 # fully-connected layers
-resulting_width = map_width // (max_pool_size1 * max_pool_size2) + 1#6
+resulting_width = map_width // (max_pool_size1 * max_pool_size2)#6+1=7
 resulting_height = map_height // (max_pool_size1 * max_pool_size2) #5
 full1_input_size = resulting_width * resulting_height * conv2_features
 

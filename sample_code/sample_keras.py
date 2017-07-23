@@ -66,7 +66,7 @@ test_labels = np.asarray(pd.get_dummies(test_labels))
 
 
 
-nb_epochs = 5
+nb_epochs = 20
 batch_size = 10
 input_size = 520
 num_classes = 13

@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import scale
+import matplotlib.pyplot as plt
 
 dataset = pd.read_csv(".\\UJIndoorLoc\\trainingData.csv",header = 0)
 features = scale(np.asarray(dataset.ix[:,0:520]))
@@ -103,6 +104,8 @@ us_cost_function = tf.reduce_mean(tf.pow(X - decoded, 2))
 s_cost_function = -tf.reduce_sum(Y * tf.log(y_))
 us_optimizer = tf.train.AdamOptimizer(learning_rate/10).minimize(us_cost_function)
 s_optimizer = tf.train.AdagradOptimizer(learning_rate).minimize(s_cost_function)
+#us_optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(us_cost_function)
+#s_optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(s_cost_function)
 
 correct_prediction = tf.equal(tf.argmax(y_,1), tf.argmax(Y,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -113,6 +116,8 @@ with tf.Session() as session:
     tf.global_variables_initializer().run()
     
     # ------------ 1. Training Autoencoders - Unsupervised Learning ----------- #
+    plot_loss = []
+    plot_epoch = []
     for epoch in range(training_epochs):
         epoch_costs = np.empty(0)
         for b in range(total_batches):
@@ -121,7 +126,18 @@ with tf.Session() as session:
             _, c = session.run([us_optimizer, us_cost_function],feed_dict={X: batch_x})
             epoch_costs = np.append(epoch_costs,c)
         print ("Epoch: ",epoch," Loss: ",np.mean(epoch_costs))
+        plot_epoch.append(epoch)
+        plot_loss.append(np.mean(epoch_costs))
+        if np.mean(epoch_costs) < 0.65:
+            break
     print ("Unsupervised pre-training finished...")
+    
+    plt.plot(plot_epoch, plot_loss, 'k-')
+    plt.title('AutoEncoder Loss per Generation')
+    plt.xlabel('Generation')
+    plt.ylabel('AutoEncoder Loss')
+    plt.show()
+
     
     
     # ---------------- 2. Training NN - Supervised Learning ------------------ #
