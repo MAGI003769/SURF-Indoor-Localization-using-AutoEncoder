@@ -122,7 +122,7 @@ train_step = my_optimizer.minimize(loss)
 # while labels are the real label stored in dataset which trains the model
 def get_acc(logists, labels):
     batch_predictions = np.argmax(logists, axis=1)
-    bingo = np.sum(np.equal(batch_predictions, labels))
+    bingo = np.sum(np.equal(batch_predictions, np.max(labels, axis=1)))
     return(100. * bingo/batch_predictions.shape[0])
 
 train_loss = []
@@ -149,6 +149,6 @@ with tf.Session() as sess:
             epoch_acc = np.append(epoch_acc, batch_acc)
             print(b)
         print ("Epoch: ",epoch," Loss: ",np.mean(epoch_loss)," Training Accuracy: ", \
-            sess.run(np.mean(epoch_acc), feed_dict={X: train_x, Y: train_y}), \
+            np.mean(epoch_acc), \
             "Validation Accuracy:", sess.run(accuracy, feed_dict={X: val_x, Y: val_y}))
     print ("Supervised training finished...")

@@ -37,7 +37,7 @@ n_classes = labels.shape[1]
 
 learning_rate = 0.01
 training_epochs = 20
-batch_size = 10
+batch_size = 200
 
 total_batches = dataset.shape[0] // batch_size
 

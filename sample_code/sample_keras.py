@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.preprocessing import scale
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
+from keras.callbacks import TensorBoard
 
 
 
@@ -46,7 +47,7 @@ train_labels = np.asarray(dummy_labels) #labels is an array of shape 19937 x 13.
 #generate len(train_AP_features) of floats in between 0 and 1
 train_val_split = np.random.rand(len(train_AP_features))
 #convert train_val_split to an array of booleans: if elem < 0.7 = true, else: false
-train_val_split = train_val_split < 0.70 #should contain ~70% percent true
+train_val_split = train_val_split < 0.90 #should contain ~70% percent true
 
 
 
@@ -91,22 +92,22 @@ e = encoder()
 
 d = decoder(e)
 
-d.fit(train_X, train_X, epochs=nb_epochs, batch_size=batch_size)
+d.fit(train_X, train_X, epochs=nb_epochs, batch_size=batch_size, callbacks=[TensorBoard(log_dir='./graphs/SAE')])
 
 def classifier(d):
     num_to_remove = 3
     for i in range(num_to_remove):
         d.pop()
-    d.add(Dense(128, input_dim=64, activation='tanh', use_bias=True))
-    d.add(Dense(128, activation='tanh', use_bias=True))
+    d.add(Dense(128, input_dim=64, activation='relu', use_bias=True))
+    d.add(Dense(128, activation='relu', use_bias=True))
     d.add(Dense(num_classes, activation='softmax', use_bias=True))
     d.compile(optimizer='adam', loss='categorical_crossentropy',metrics=['accuracy'])
     return d
 
 
-c = classifier(d)
+c = classifier(e)
 
-c.fit(train_X, train_y, validation_data=(val_X, val_y), epochs=nb_epochs, batch_size=batch_size)
+c.fit(train_X, train_y, validation_data=(val_X, val_y), epochs=nb_epochs, batch_size=batch_size, callbacks=[TensorBoard(log_dir='./graphs/classifier')])
 
 loss, acc = c.evaluate(test_AP_features, test_labels)
 
