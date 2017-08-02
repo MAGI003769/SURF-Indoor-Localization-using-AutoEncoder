@@ -13,7 +13,7 @@ Hope this summer can be cool. </br>
 
 ## Problems:
 1. In deep learning algorithm, the testing accuracy is much lower than training and validation.
-- ~~an strong relation between loss of AutoEncoder and final testing accuracy was observed. May be we should design a better AutoEncoder if necessary. ~~
+- ~~an strong relation between loss of AutoEncoder and final testing accuracy was observed. May be we should design a better AutoEncoder if necessary~~
 
 
 Solving: This problem mainly blames to the preprocessing of the data. In the data base, the non-detected APs are represented as 100 but it is much better to use -110. In addition, when scaling the original data, it is better to jointly scaling them rather than independently. 
