@@ -26,6 +26,6 @@ The lastest version of model has follwing settings:
 - Use tanh in autoencoder while relu in classifier
 
 Here are some plots of evaluation critera
-![SAE_loss](./img/SAE_loss_tanh.PNG)
-![classifier_loss](./img/classifier_loss_tanh.PNG)
-![classifier_acc](./img/classifier_acc_tanh.PNG)
+![SAE_loss](img/SAE_loss_tanh.PNG)
+![classifier_loss](img/classifier_loss_tanh.PNG)
+![classifier_acc](img/classifier_acc_tanh.PNG)
