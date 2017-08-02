@@ -99,12 +99,12 @@ def encode(x):
 def decode(x):
     l1 = tf.nn.tanh(tf.add(tf.matmul(x,d_weights_h1),d_biases_h1))
     l2 = tf.nn.tanh(tf.add(tf.matmul(l1,d_weights_h2),d_biases_h2))
-    l3 = tf.nn.sigmoid(tf.add(tf.matmul(l2,d_weights_h3),d_biases_h3))
+    l3 = tf.nn.tanh(tf.add(tf.matmul(l2,d_weights_h3),d_biases_h3))
     return l3
 
 def dnn(x):
     l1 = tf.nn.relu(tf.add(tf.matmul(x,dnn_weights_h1),dnn_biases_h1))
-    #dropout = tf.nn.dropout(l1, 0.5)
+    dropout = tf.nn.dropout(l1, 0.5)
     l2 = tf.nn.relu(tf.add(tf.matmul(l1,dnn_weights_h2),dnn_biases_h2))
     out = tf.nn.softmax(tf.add(tf.matmul(l2,dnn_weights_out),dnn_biases_out))
     return out
@@ -132,7 +132,7 @@ with tf.Session() as session:
     # ------------ 1. Training Autoencoders - Unsupervised Learning ----------- #
     plot_loss = []
     plot_epoch = []
-    for epoch in range(training_epochs):
+    for epoch in range(training_epochs*3):
         epoch_costs = np.empty(0)
         for b in range(total_batches):
             offset = (b * batch_size) % (features.shape[0] - batch_size)
@@ -142,14 +142,12 @@ with tf.Session() as session:
         print ("Epoch: ",epoch," Loss: ",np.mean(epoch_costs))
         plot_epoch.append(epoch)
         plot_loss.append(np.mean(epoch_costs))
-        if np.mean(epoch_costs) < 0.65:
-            break
     print ("Unsupervised pre-training finished...")
     
     #print('encoder_3:', session.run(e_weights_h3, feed_dict={X: batch_x}))
     #print('decoder_1:', session.run(d_weights_h1, feed_dict={X: batch_x}))
-    for i in range(batch_x[0].shape[0]):
-        print('[batch_x reconstruction]:', batch_x[0][i], session.run(decoded[0][i], feed_dict={X: batch_x}))
+    #for i in range(batch_x[0].shape[0]):
+        #print('[batch_x reconstruction]:', batch_x[0][i], session.run(decoded[0][i], feed_dict={X: batch_x}))
 
     plt.plot(plot_epoch, plot_loss, 'k-')
     plt.title('AutoEncoder Loss per Generation')
@@ -159,8 +157,11 @@ with tf.Session() as session:
     plt.show()
 
     
-    
     # ---------------- 2. Training NN - Supervised Learning ------------------ #
+    plot_loss = []
+    plot_epoch = []
+    plot_train_acc = []
+    plot_val_acc = []
     for epoch in range(training_epochs):
         epoch_costs = np.empty(0)
         for b in range(total_batches):
@@ -169,11 +170,29 @@ with tf.Session() as session:
             batch_y = train_y[offset:(offset + batch_size), :]
             _, c = session.run([s_optimizer, s_cost_function],feed_dict={X: batch_x, Y : batch_y})
             epoch_costs = np.append(epoch_costs,c)
+        plot_train_acc.append(session.run(accuracy, feed_dict={X: train_x, Y: train_y}))
+        plot_val_acc.append(session.run(accuracy, feed_dict={X: val_x, Y: val_y}))
         print ("Epoch: ",epoch," Loss: ",np.mean(epoch_costs)," Training Accuracy: ", \
             session.run(accuracy, feed_dict={X: train_x, Y: train_y}), \
             "Validation Accuracy:", session.run(accuracy, feed_dict={X: val_x, Y: val_y}))
+        plot_epoch.append(epoch)
+        plot_loss.append(np.mean(epoch_costs))
             
     print ("Supervised training finished...")
+
+    plt.plot(plot_epoch, plot_loss, 'k-')
+    plt.title('Classifier Loss per Epoch')
+    plt.xlabel('Epoch')
+    plt.ylabel('Classifier Loss')
+    plt.grid()
+    plt.show()
     
+    plot1, = plt.plot(plot_epoch, plot_train_acc, '-r')
+    plot2, = plt.plot(plot_epoch, plot_val_acc, '-b')
+    plt.title('Training and Validation Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend([plot1, plot2], ['Training Accuracy', 'Validation Accuracy'])
+    plt.grid()
+    plt.show()
 
     print ("\nTesting Accuracy:", session.run(accuracy, feed_dict={X: test_features, Y: test_labels}))
