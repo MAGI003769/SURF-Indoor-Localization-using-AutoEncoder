@@ -4,6 +4,7 @@
 2017 SURF: Indoor Localization </br>
 Mainly relevant essential material, files and code. </br>
 Hope this summer can be cool. </br>
+The main idea is from [Low-effort place recognition with WiFi fingerprints using deep learning](https://arxiv.org/abs/1611.02049) and the implementation based on this [repo](https://github.com/aqibsaeed/Place-Recognition-using-Autoencoders-and-NN) with slight modifications.
 
 
 ## Folders:
