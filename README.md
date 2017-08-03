@@ -37,8 +37,8 @@ Now we need to establish our own database which might have more than 100 APs tha
 ## APs in EE 4th floor
 
 There are 143 APs are detected but, as some rooms are not accessible, the total number might be more than that. We are trying to use this as the input dimension and -110 representing lack of signal for an AP. 
-```python
-143
+```
+BSSID                NO.
 00:26:5a:b2:c1:ea 	 40
 0a:18:d6:95:93:1e 	 65
 0e:18:d6:95:93:1e 	 100
