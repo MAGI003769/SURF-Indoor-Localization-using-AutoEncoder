@@ -126,6 +126,9 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 # ------------------------- run the model --------------------------- #
 
+saver = tf.train.Saver()
+model_path = '.\\trained_model\\trained_model.ckpt'
+
 with tf.Session() as session:
     tf.global_variables_initializer().run()
     
@@ -179,6 +182,8 @@ with tf.Session() as session:
         plot_loss.append(np.mean(epoch_costs))
             
     print ("Supervised training finished...")
+
+    save_path = saver.save(session, model_path)
 
     plt.plot(plot_epoch, plot_loss, 'k-')
     plt.title('Classifier Loss per Epoch')

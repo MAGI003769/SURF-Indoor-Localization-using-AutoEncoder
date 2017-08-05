@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-dataset = pd.read_csv("test_info(1).csv", header=0)
+dataset = pd.read_csv("test_info_data.csv", header=0)
 total_APs = list(dataset.ix[:,5])
 total_APs = list(set(total_APs))
 
