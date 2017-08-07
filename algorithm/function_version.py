@@ -4,26 +4,6 @@ import tensorflow as tf
 from sklearn.preprocessing import scale
 import matplotlib.pyplot as plt
 
-session = tf.Session()
-
-user_input = pd.read_csv("user_input.csv",header = 0)
-user_input = np.asarray(user_input.ix[:, 0:520]).reshape([1, 520])
-for j in range(520):
-	if user_input[0][j] == 100:
-		user_input[0][j] = -110
-user_input = scale(user_input, axis=1)
-
-test_dataset = pd.read_csv(".\\UJIndoorLoc\\validationData.csv",header = 0)
-test_features = np.asarray(test_dataset.ix[:,0:520])
-for i in range(test_features.shape[0]):
-    for j in range(test_features.shape[1]):
-        if test_features[i][j] == 100:
-            test_features[i][j] = -110
-test_features = scale(test_features, axis=1)
-print('test_feature:', test_features.shape)
-test_labels = np.asarray(test_dataset["BUILDINGID"].map(str) + test_dataset["FLOOR"].map(str))
-test_labels = np.asarray(pd.get_dummies(test_labels))
-
 def weight_variable(shape):
     initial = tf.truncated_normal(shape, stddev = 0.1)
     return tf.Variable(initial)
@@ -103,13 +83,12 @@ def dnn(x):
     out = tf.nn.softmax(tf.add(tf.matmul(l2,dnn_weights_out),dnn_biases_out))
     return out
 
-encoded = encode(X)
-decoded = decode(encoded) 
-y_ = dnn(encoded)
-
-room = tf.argmax(y_, 1)
-
-saver = tf.train.Saver()
-saver.restore(session, ".\\trained_model\\trained_model.ckpt")
-
-print(session.run(room, {X: user_input}))
+def run_model(user_input):
+	encoded = encode(X)
+	decoded = decode(encoded) 
+	y_ = dnn(encoded)
+	room = tf.argmax(y_, 1)
+	session = tf.Session()
+	saver = tf.train.Saver()
+	saver.restore(session, ".\\trained_model\\trained_model.ckpt")
+	return session.run(room, {X: user_input})
