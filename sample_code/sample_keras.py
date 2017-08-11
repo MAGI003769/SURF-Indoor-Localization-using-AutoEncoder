@@ -19,7 +19,7 @@ train_df = train_df[:19930]
 train_AP_strengths = train_df.ix[:,:520] #select first 520 columns
 
 #Scale transforms data to center to the mean and component wise scale to unit variance
-train_AP_features = scale(np.asarray(train_AP_strengths))
+train_AP_features = scale(np.asarray(train_AP_strengths), axis=1)
 
 #The following two objects are actually pandas.core.series.Series objects
 building_ids_str = train_df["BUILDINGID"].map(str) #convert all the building ids to strings
@@ -61,7 +61,7 @@ val_y = train_labels[~train_val_split]
 
 #Turn the given validation set into a testing set
 test_df = pd.read_csv(path_validation,header = 0)
-test_AP_features = scale(np.asarray(test_df.ix[:,0:520]))
+test_AP_features = scale(np.asarray(test_df.ix[:,0:520]), axis=1)
 test_labels = np.asarray(test_df["BUILDINGID"].map(str) + test_df["FLOOR"].map(str))
 test_labels = np.asarray(pd.get_dummies(test_labels))
 

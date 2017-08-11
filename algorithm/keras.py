@@ -17,6 +17,10 @@ path_validation = "./UJIndoorLoc/validationData.csv"
 train_df = pd.read_csv(path_train,header = 0)
 train_df = train_df[:19930]
 train_AP_strengths = train_df.ix[:,:520] #select first 520 columns
+for i in range(features.shape[0]):
+    for j in range(features.shape[1]):
+        if features[i][j] == 100:
+            features[i][j] = -110
 
 #Scale transforms data to center to the mean and component wise scale to unit variance
 train_AP_features = scale(np.asarray(train_AP_strengths), -1)

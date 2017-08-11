@@ -42,7 +42,7 @@ n_hidden_3 = 32
 n_classes = labels.shape[1]
 
 learning_rate = 0.01
-training_epochs = 20
+training_epochs = 30
 batch_size = 10
 
 total_batches = dataset.shape[0] // batch_size
@@ -106,7 +106,7 @@ def decode(x):
 def dnn(x):
     l1 = tf.nn.relu(tf.add(tf.matmul(x,dnn_weights_h1),dnn_biases_h1))
     dropout = tf.nn.dropout(l1, 0.5)
-    l2 = tf.nn.relu(tf.add(tf.matmul(l1,dnn_weights_h2),dnn_biases_h2))
+    l2 = tf.nn.relu(tf.add(tf.matmul(dropout,dnn_weights_h2),dnn_biases_h2))
     #l3 = tf.nn.relu(tf.add(tf.matmul(l2,dnn_weights_h3),dnn_biases_h3))
     out = tf.nn.softmax(tf.add(tf.matmul(l2,dnn_weights_out),dnn_biases_out))
     return out
