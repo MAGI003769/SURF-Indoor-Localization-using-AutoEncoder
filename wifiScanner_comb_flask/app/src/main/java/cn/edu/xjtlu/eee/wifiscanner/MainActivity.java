@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static cn.edu.xjtlu.eee.wifiscanner.R.id.Send;
 
@@ -56,7 +58,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
 		registerReceiver(receiverWifi, new IntentFilter(
 				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 		mainText.setText("Press \"Send\" to update...\n");
+
+		//Scan after 0.1s of start and continue every 0.1s
+		timer.schedule(task, 100, 1500);
 	}
+
+	Timer timer = new Timer();
+	TimerTask task = new TimerTask() {
+		@Override
+		public void run() {
+			mainWifi.startScan();
+			wifiList = mainWifi.getScanResults();
+		}
+	};
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, 0, "Refresh");
@@ -97,16 +111,17 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 	protected void onPause() {
 		super.onPause();
+		unregisterReceiver(receiverWifi);
 	}
 
 	protected void onResume() {
 		super.onResume();
-
 		registerReceiver(receiverWifi, new IntentFilter(
 				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
 		mainWifi.startScan();
 		wifiList = mainWifi.getScanResults();
+
 		mainText.setText((Integer.valueOf(wifiList.size())).toString());
 	}
 
@@ -120,89 +135,89 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 	public void onClick(View view)
 	{
-		sb = new StringBuilder();
-		csv = new StringBuilder();
-		mainText.setText(null);
 
-		building = Building.getText().toString();
-		room = Room.getText().toString();
-		location_x = Location_x.getText().toString();
-		location_y = Location_y.getText().toString();
+			//refresh detected signal
+			mainWifi.startScan();
+			wifiList = mainWifi.getScanResults();
 
-		if (isWiFi() != true) {
-			Toast.makeText(this, "Open WiFi mode please....", Toast.LENGTH_SHORT).show();
-			return;
-		}
+			mainText.setText(null);
 
-		registerReceiver(receiverWifi, new IntentFilter(
-				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-		if (building.length() == 0 || room.length() == 0 || location_x.length() == 0 || location_y.length() == 0) {
-			Toast.makeText(this, "Incomplete input, try again..", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		else
-		{
-			//mainWifi
+			building = Building.getText().toString();
+			room = Room.getText().toString();
+			location_x = Location_x.getText().toString();
+			location_y = Location_y.getText().toString();
+
+			if (isWiFi() != true) {
+				Toast.makeText(this, "Open WiFi mode please....", Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+			if (building.length() == 0 || room.length() == 0 || location_x.length() == 0 || location_y.length() == 0) {
+				Toast.makeText(this, "Incomplete input, try again..", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			else
+			{
+				//mainWifi
             /*Intent scanResults = new Intent();
             scanResults.putExtra("AP_LIST", csv.toString());
             setResult(RESULT_OK, scanResults);
             finish();*/
-			mainWifi.startScan();
-			wifiList = mainWifi.getScanResults();
+				sb = new StringBuilder();
+				csv = new StringBuilder();
 
-			sb.append("Number of APs Detected: ");
-			sb.append((Integer.valueOf(wifiList.size())).toString());
-			sb.append("\n\n");
-			// SSID
-			for (int i = 0; i < wifiList.size(); i++) {
-				// sb.append((Integer.valueOf(i + 1)).toString() + ".");
-				// prepare text for display and CSV table
-				if (((wifiList.get(i)).SSID.equals(okSSID1)) || ((wifiList.get(i)).SSID.equals(okSSID2)) || ((wifiList.get(i)).SSID.equals(okSSID3))) {// && !((wifiList.get(i)).SSID.equals(okSSID3)) && !((wifiList.get(i)).SSID.equals(okSSID4))) {
-					continue;
-				}
-				sb.append("SSID:").append((wifiList.get(i)).SSID);
-				sb.append("\n");
-				sb.append("BSSID:").append((wifiList.get(i)).BSSID);
-				sb.append("\n");
-				sb.append("Capabilities:").append(
-						(wifiList.get(0)).capabilities);
-				sb.append("\n");
-				sb.append("Frequency:").append((wifiList.get(i)).frequency);
-				sb.append("\n");
-				sb.append("Level:").append((wifiList.get(i)).level);
+				sb.append("Number of APs Detected: ");
+				sb.append((Integer.valueOf(wifiList.size())).toString());
 				sb.append("\n\n");
-
-				csv.append(building);
-				csv.append(",");
-
-				csv.append(room);
-				csv.append(",");
-
-				csv.append(location_x);
-				csv.append(",");
-
-				csv.append(location_y);
-				csv.append(",");
 				// SSID
-				csv.append((wifiList.get(i)).SSID);
-				csv.append(",");
-				// BSSID
-				csv.append((wifiList.get(i)).BSSID);
-				csv.append(",");
-				// frequency
-				csv.append((wifiList.get(i)).frequency);
-				csv.append(",");
-				// level
-				csv.append((wifiList.get(i)).level);
-				csv.append(",");
-			}
-			unregisterReceiver(receiverWifi);
+				for (int i = 0; i < wifiList.size(); i++) {
+					// sb.append((Integer.valueOf(i + 1)).toString() + ".");
+					// prepare text for display and CSV table
+					if (((wifiList.get(i)).SSID.equals(okSSID1)) || ((wifiList.get(i)).SSID.equals(okSSID2)) || ((wifiList.get(i)).SSID.equals(okSSID3))) {// && !((wifiList.get(i)).SSID.equals(okSSID3)) && !((wifiList.get(i)).SSID.equals(okSSID4))) {
+						continue;
+					}
+					sb.append("SSID:").append((wifiList.get(i)).SSID);
+					sb.append("\n");
+					sb.append("BSSID:").append((wifiList.get(i)).BSSID);
+					sb.append("\n");
+					sb.append("Capabilities:").append(
+							(wifiList.get(0)).capabilities);
+					sb.append("\n");
+					sb.append("Frequency:").append((wifiList.get(i)).frequency);
+					sb.append("\n");
+					sb.append("Level:").append((wifiList.get(i)).level);
+					sb.append("\n\n");
 
-			mainText.setText(sb.toString());
-			String method = "register";
-			BackgroundTask backgroundTask = new BackgroundTask(this);
-			String result;
-			backgroundTask.execute(method, csv.toString());
+					csv.append(building);
+					csv.append(",");
+
+					csv.append(room);
+					csv.append(",");
+
+					csv.append(location_x);
+					csv.append(",");
+
+					csv.append(location_y);
+					csv.append(",");
+					// SSID
+					csv.append((wifiList.get(i)).SSID);
+					csv.append(",");
+					// BSSID
+					csv.append((wifiList.get(i)).BSSID);
+					csv.append(",");
+					// frequency
+					csv.append((wifiList.get(i)).frequency);
+					csv.append(",");
+					// level
+					csv.append((wifiList.get(i)).level);
+					csv.append(",");
+				}
+
+				mainText.setText(sb.toString());
+				String method = "register";
+				BackgroundTask backgroundTask = new BackgroundTask(this);
+				String result;
+				backgroundTask.execute(method, csv.toString());
+			}
 		}
-	}
 }
