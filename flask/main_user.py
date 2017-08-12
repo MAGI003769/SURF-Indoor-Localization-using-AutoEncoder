@@ -245,15 +245,7 @@ def isEmpty():
 				 lists[i][0], lists[i][1], lists[i][2]
 				])
 				spamwriter.writerow(data)
-				
-	'''with open('xxx.csv', 'w', newline='') as csvfile: 
-		spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
-		if not os.path.getsize('./tempList.csv'):       #file not established   
-			for i in range(0,200): 
-				data = ([
-				 lists[i][0], lists[i][1], lists[i][2]
-				])
-				spamwriter.writerow(data)'''
+
 	
 def refreshCSV(Room):
 	with open('tempList.csv', 'r', newline='') as csvfile: 
@@ -269,7 +261,7 @@ def refreshCSV(Room):
 					RSS[row][0], RSS[row][1], RSS[row][2]
 					])
 				spamwriter.writerow(room)
-		
+		'''
 		with open('xxx.csv', 'a', newline='') as csvfile: 
 			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
 								
@@ -289,7 +281,7 @@ def refreshCSV(Room):
 				RSS[i][0], RSS[i][1], RSS[i][2]
 				])
 				spamwriter.writerow(data)
-				
+				'''
 	
 @app.route('/', methods=['POST'])
 def post():
@@ -325,15 +317,12 @@ def post():
 	#addAPs(Building, Room, Location_x, Location_y, SSID,BSSID, Frequency, Level)
 	
 	#addCSV(Building, Room, Location_x, Location_y, BSSID, Frequency, Level)
-	#showAPs(2)
-	#uid = request.form['uid']
-	#name =  request.form['name']
 	#print('Building:'Building, 'Room:'Room,'Location_x:'Location_x, 'Location_y:'Location_y, 'SSID:'SSID, 'BSSID:'BSSID, 'Frequency:'Frequency, 'Level:'Level, 'Down?:'Down)
 	#print ("Building: %s, Room: %s, Location_x: %s, Location_y: %s, SSID: %s, BSSID: %s, Frequency: %s, Level: %s, Down?: %s" % (Building, Room, Location_x, Location_y, SSID, BSSID, Frequency, Level, Down))
 
 	return 'OK.'
 if __name__ == "__main__":
 	app.run(host='192.168.43.222', debug=True)
-	#app.run(host='192.168.43.222', debug=True)
+	
 
 

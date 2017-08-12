@@ -7,6 +7,7 @@ Hope this summer can be cool. </br>
 
 The main idea is from [Low-effort place recognition with WiFi fingerprints using deep learning](https://arxiv.org/abs/1611.02049) and the implementation based on this [repo](https://github.com/aqibsaeed/Place-Recognition-using-Autoencoders-and-NN) with slight modifications. 
 
+Thanks for contribution from my groupmates [@ZzhKlaus](https://github.com/ZzhKlaus) and [@ZikunAbrahamTan](https://github.com/ZikunAbrahamTan) who are really brilliant and respectively take in charge of coding in server part and android app for client.  
 
 ## Folders:
 - algorithm: holding relevant code for offline
@@ -20,7 +21,18 @@ The main idea is from [Low-effort place recognition with WiFi fingerprints using
 
 Solving: This problem mainly blames to the preprocessing of the data. In the data base, the non-detected APs are represented as 100 but it is much better to use -110. In addition, when scaling the original data, it is better to jointly scaling them rather than independently. 
 
-2. In practical case testing, the returned label is always be the previous location. For instance, just having finished test at location labeled as 6, we move to the location labeled as 0 and test the system; but the returned label is still 6 for the first 2 or 3 detection. 
+2. **_"Detection Delay"_**: In practical case testing, the returned label is always be the previous location. For instance, just having finished test at location labeled as 6, we move to the location labeled as 0 and test the system; but the returned label is still 6 for the first 2 or 3 detection. 
+
+Solving: It can be resulted from the android part which we use to detect and send the RSS information. Initially, we thought the lack of detection existed when changing location and this problem can be simply resolved by simply setting the program to madly scanning the signal in order to refresh the detected results. Unfortunately, however, this solution didn't work. After searching on the Internet, we figure it out from a similar question on [stackoverflow](https://stackoverflow.com/questions/7969174/reducing-delay-between-two-wifi-scans). It is related to the frequency channels about WLAN. In our case, the distribution of signals in frequency channels can be illustrated as figures below.
+
+![frequency_channels_2.4G](img/frequency_channels_2.4G.png)
+![frequency_channels_5G](img/frequency_channels_5G.png)
+
+From those plot we can see that signals from all the access points on this floor occupy 13 frequency channels which implies we need at least 1.3s to guarantee the accuracy of detection as an access point broadcasts a beacon roughly every 100 ms. 
+
+![detection_interval](img/detection_interval.PNG)
+
+Thus, more than that for insurance purpose, we choose 1.5s as the gap between each detection of signals. The result seems not bad. We will keep more research about this issue. Firstly from [wiki](https://en.wikipedia.org/wiki/List_of_WLAN_channels) to have a general idea.
 
 ## Visualized model result:
 
@@ -247,4 +259,8 @@ The APs will be sorted as we set before sent to server part where the trained ne
 
 ## Practic case testing:
 
+### 9th Aug:
 We simply collected the signal samples from 7 different locations on 4th floor of EE building and collected in .csv files as dataset to train the model. As the amount of collected data increases, the performance seems to be better but, at location labeled as 2, the systems can be confused. 
+
+### 12th Aug:
+The accuracy at location 2 is still barely satisfactory, whereas, after fixing the problem with "detection delay", the overall accuracy has a significant improvement. We have gotten rid of the problem that might occur when transfering from a location to another.
