@@ -7,6 +7,7 @@ Hope this summer can be cool. </br>
 
 The main idea is from [Low-effort place recognition with WiFi fingerprints using deep learning](https://arxiv.org/abs/1611.02049) and the implementation based on this [repo](https://github.com/aqibsaeed/Place-Recognition-using-Autoencoders-and-NN) with slight modifications. 
 
+Thanks for contribution from my groupmates @ZzhKlaus and @ZikunAbrahamTan who are really brilliant and respectively take in charge of coding in server part and android app for client.  
 
 ## Folders:
 - algorithm: holding relevant code for offline
@@ -31,7 +32,7 @@ From those plot we can see that signals from all the access points on this floor
 
 ![detection_interval](img/detection_interval.png)
 
-Thus, more than that for insurance purpose, we choose 1.5s as the gap between each detection of signals. The result seems not bad. We will keep more research about this issue. Firstly from [wiki_list_of_WLAN_frequency_channel](https://en.wikipedia.org/wiki/List_of_WLAN_channels).
+Thus, more than that for insurance purpose, we choose 1.5s as the gap between each detection of signals. The result seems not bad. We will keep more research about this issue. Firstly from [wiki](https://en.wikipedia.org/wiki/List_of_WLAN_channels) to have a general idea.
 
 ## Visualized model result:
 
