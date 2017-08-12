@@ -29,7 +29,7 @@ Solving: It can be resulted from the android part which we use to detect and sen
 
 From those plot we can see that signals from all the access points on this floor occupy 13 frequency channels which implies we need at least 1.3s to guarantee the accuracy of detection as an access point broadcasts a beacon roughly every 100 ms. 
 
-$T = 100ms \times 13 = 1.3s$
+$$T = 100ms \times 13 = 1.3s$$
 
 Thus, we choose 1.5s as the gap between each detection of signals. The result seems not bad.
 
