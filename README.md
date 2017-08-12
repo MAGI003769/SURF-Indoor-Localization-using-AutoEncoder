@@ -29,9 +29,9 @@ Solving: It can be resulted from the android part which we use to detect and sen
 
 From those plot we can see that signals from all the access points on this floor occupy 13 frequency channels which implies we need at least 1.3s to guarantee the accuracy of detection as an access point broadcasts a beacon roughly every 100 ms. 
 
-![equation](http://latex.codecogs.com/gif.latex?T = 100ms \times 13 = 1.3s})
+![detection_interval](img/detection_interval.png)
 
-Thus, we choose 1.5s as the gap between each detection of signals. The result seems not bad.
+Thus, more than that for insurance purpose, we choose 1.5s as the gap between each detection of signals. The result seems not bad. We will keep more research about this issue. Firstly from [wiki_list_of_WLAN_frequency_channel](https://en.wikipedia.org/wiki/List_of_WLAN_channels).
 
 ## Visualized model result:
 
