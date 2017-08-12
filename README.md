@@ -7,7 +7,7 @@ Hope this summer can be cool. </br>
 
 The main idea is from [Low-effort place recognition with WiFi fingerprints using deep learning](https://arxiv.org/abs/1611.02049) and the implementation based on this [repo](https://github.com/aqibsaeed/Place-Recognition-using-Autoencoders-and-NN) with slight modifications. 
 
-Thanks for contribution from my groupmates @ZzhKlaus and @ZikunAbrahamTan who are really brilliant and respectively take in charge of coding in server part and android app for client.  
+Thanks for contribution from my groupmates [@ZzhKlaus](https://github.com/ZzhKlaus) and [@ZikunAbrahamTan](https://github.com/ZikunAbrahamTan) who are really brilliant and respectively take in charge of coding in server part and android app for client.  
 
 ## Folders:
 - algorithm: holding relevant code for offline
