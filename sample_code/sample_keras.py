@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.preprocessing import scale
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
+from keras.callbacks import TensorBoard
 
 
 
@@ -18,7 +19,7 @@ train_df = train_df[:19930]
 train_AP_strengths = train_df.ix[:,:520] #select first 520 columns
 
 #Scale transforms data to center to the mean and component wise scale to unit variance
-train_AP_features = scale(np.asarray(train_AP_strengths))
+train_AP_features = scale(np.asarray(train_AP_strengths), axis=1)
 
 #The following two objects are actually pandas.core.series.Series objects
 building_ids_str = train_df["BUILDINGID"].map(str) #convert all the building ids to strings
@@ -46,7 +47,7 @@ train_labels = np.asarray(dummy_labels) #labels is an array of shape 19937 x 13.
 #generate len(train_AP_features) of floats in between 0 and 1
 train_val_split = np.random.rand(len(train_AP_features))
 #convert train_val_split to an array of booleans: if elem < 0.7 = true, else: false
-train_val_split = train_val_split < 0.70 #should contain ~70% percent true
+train_val_split = train_val_split < 0.90 #should contain ~70% percent true
 
 
 
@@ -60,13 +61,13 @@ val_y = train_labels[~train_val_split]
 
 #Turn the given validation set into a testing set
 test_df = pd.read_csv(path_validation,header = 0)
-test_AP_features = scale(np.asarray(test_df.ix[:,0:520]))
+test_AP_features = scale(np.asarray(test_df.ix[:,0:520]), axis=1)
 test_labels = np.asarray(test_df["BUILDINGID"].map(str) + test_df["FLOOR"].map(str))
 test_labels = np.asarray(pd.get_dummies(test_labels))
 
 
 
-nb_epochs = 5
+nb_epochs = 20
 batch_size = 10
 input_size = 520
 num_classes = 13
@@ -91,22 +92,22 @@ e = encoder()
 
 d = decoder(e)
 
-d.fit(train_X, train_X, epochs=nb_epochs, batch_size=batch_size)
+d.fit(train_X, train_X, epochs=nb_epochs, batch_size=batch_size, callbacks=[TensorBoard(log_dir='./graphs/SAE')])
 
 def classifier(d):
     num_to_remove = 3
     for i in range(num_to_remove):
         d.pop()
-    d.add(Dense(128, input_dim=64, activation='tanh', use_bias=True))
-    d.add(Dense(128, activation='tanh', use_bias=True))
+    d.add(Dense(128, input_dim=64, activation='relu', use_bias=True))
+    d.add(Dense(128, activation='relu', use_bias=True))
     d.add(Dense(num_classes, activation='softmax', use_bias=True))
     d.compile(optimizer='adam', loss='categorical_crossentropy',metrics=['accuracy'])
     return d
 
 
-c = classifier(d)
+c = classifier(e)
 
-c.fit(train_X, train_y, validation_data=(val_X, val_y), epochs=nb_epochs, batch_size=batch_size)
+c.fit(train_X, train_y, validation_data=(val_X, val_y), epochs=nb_epochs, batch_size=batch_size, callbacks=[TensorBoard(log_dir='./graphs/classifier')])
 
 loss, acc = c.evaluate(test_AP_features, test_labels)
 
