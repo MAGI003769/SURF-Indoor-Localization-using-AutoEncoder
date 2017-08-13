@@ -23,7 +23,7 @@ Solving: This problem mainly blames to the preprocessing of the data. In the dat
 
 2. **_"Detection Delay"_**: In practical case testing, the returned label is always be the previous location. For instance, just having finished test at location labeled as 6, we move to the location labeled as 0 and test the system; but the returned label is still 6 for the first 2 or 3 detection. 
 
-Solving: It can be resulted from the android part which we use to detect and send the RSS information. Initially, we thought the lack of detection existed when changing location and this problem can be simply resolved by simply setting the program to madly scanning the signal in order to refresh the detected results. Unfortunately, however, this solution didn't work. After searching on the Internet, we figure it out from a similar question on [stackoverflow](https://stackoverflow.com/questions/7969174/reducing-delay-between-two-wifi-scans). It is related to the frequency channels about WLAN. In our case, the distribution of signals in frequency channels can be illustrated as figures below.
+Solving: It can be resulted from the android part which we use to detect and send the RSS information. Initially, we thought the lack of detection existed when changing location and this problem can be simply resolved by simply setting the program to madly scanning the signal in order to refresh the detected results. Unfortunately, however, this solution didn't work. After searching on the Internet, we figure it out from a similar question on [stackoverflow](https://stackoverflow.com/questions/7969174/reducing-delay-between-two-wifi-scans). It is related to the frequency channels about WLAN. In our case, the distribution of signals in frequency channels can be illustrated as figures below. It's more about the accuracy of detected RSS rather than the socalled 'delay'. If we scan the signal with a excessive frequency, it might be hard to obtain the actual RSS pattern at a location. no matter when collecting training data or testing phase, such a issue will always affect the performance of the system.
 
 ![frequency_channels_2.4G](img/frequency_channels_2.4G.png)
 ![frequency_channels_5G](img/frequency_channels_5G.png)
@@ -32,7 +32,7 @@ From those plot we can see that signals from all the access points on this floor
 
 ![detection_interval](img/detection_interval.PNG)
 
-Thus, more than that for insurance purpose, we choose 1.5s as the gap between each detection of signals. The result seems not bad. We will keep more research about this issue. Firstly from [wiki](https://en.wikipedia.org/wiki/List_of_WLAN_channels) to have a general idea.
+Thus, more than that for insurance purpose, we choose 1.5s as the gap between each detection of signals. The result seems not bad. We will keep more research about this issue. Firstly from [wiki](https://en.wikipedia.org/wiki/List_of_WLAN_channels) to have a general idea.  
 
 ## Visualized model result:
 
