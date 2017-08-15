@@ -4,7 +4,6 @@ from app import db, models
 import csv
 import os #to get current path
 import importlib
-import sqlite3 #about database 
 
 from model import *
 
@@ -198,20 +197,7 @@ def refreshCSV(Room,Model,Time):
 				spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
 				spamwriter.writerow(data)
 				
-#add to database, using sqlite3
-def addToDB():
-	with open('tempList.csv', 'r', newline='') as csvfile: 
-		reader = csv.reader(csvfile)
-		RSS = [row for row in reader]
-
-	conn = sqlite3.connect('fingerprints.db')
-	for i in range(1,201):
-
-		conn.execute("INSERT INTO COLLECTION (ID,BSSID,Level,Room, Model, Time) "
-				 	"VALUES(null,'"+RSS[i][0]+"','"+RSS[i][1]+"','"+RSS[i][2]+"','"+RSS[i][3]+"','"+RSS[i][4]+"')")
-	conn.commit()
-	conn.close()
-
+	
 @app.route('/', methods=['POST'])
 def post():
 	isEmpty()
@@ -232,9 +218,7 @@ def post():
 	tempList(BSSID, Level, Room, Model, Time)
 	
 	if Done == 'YES':
-		refreshCSV(Room,Model,Time)	
-		addToDB()
-
+		refreshCSV(Room,Model,Time)		
 		initializeTempList()
 		print('YES')
 	else:

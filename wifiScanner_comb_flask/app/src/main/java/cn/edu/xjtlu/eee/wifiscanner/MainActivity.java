@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,9 +34,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
 	WifiManager mainWifi;
 	WifiReceiver receiverWifi;
 	List<ScanResult> wifiList;
-
-	Build bd = new Build();
-	String model = bd.MODEL;
 
 	StringBuilder sb = new StringBuilder();		// info for display
 	StringBuilder csv = new StringBuilder();	// transfer info
@@ -77,14 +71,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
 			wifiList = mainWifi.getScanResults();
 		}
 	};
-
-	String getTime() {
-		long time = System.currentTimeMillis();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date d1 = new Date(time);
-		String dt = format.format(d1);
-		return dt;
-	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, 0, "Refresh");
@@ -136,10 +122,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 		mainWifi.startScan();
 		wifiList = mainWifi.getScanResults();
 
-		mainText.setText("Press 'send' to send info...");
-		//mainText.setText(getTime());
-		//mainText.setText(model);
-		//mainText.setText((Integer.valueOf(wifiList.size())).toString());
+		mainText.setText((Integer.valueOf(wifiList.size())).toString());
 	}
 
 	class WifiReceiver extends BroadcastReceiver {
@@ -149,7 +132,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
 			scanFinished = true;
 		}
 	}
-
 
 	public void onClick(View view)
 	{
@@ -229,13 +211,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 					// level
 					csv.append((wifiList.get(i)).level);
 					csv.append(",");
-					// model
-					csv.append(model);
-					csv.append(",");
-					// time
-					csv.append(getTime());
-					csv.append(",");
 				}
+
 				mainText.setText(sb.toString());
 				String method = "register";
 				BackgroundTask backgroundTask = new BackgroundTask(this);
