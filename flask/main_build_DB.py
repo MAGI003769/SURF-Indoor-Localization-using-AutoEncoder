@@ -37,8 +37,8 @@ def showAPs(num):
 # Write all info in DB into a csv file, without SSID stored, encode mode is UTF-8 (as some SSID contains chinese characters)
 def addAllCSV():    #whole database	
 	with open('APs.csv', 'w', newline='') as csvfile: 
-		spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
 		if not os.path.getsize('./APs.csv'): 
+			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
 			spamwriter.writerow([ 'Room', 'BSSID',  'Level'])
 		
 		users = models.User.query.all()
@@ -47,18 +47,21 @@ def addAllCSV():    #whole database
 			data = ([
 			 u.Room, u.BSSID, u.Level
 			])
+			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
 			spamwriter.writerow(data)
 			
 #add one time's scanner result			
-def addCSV(Building, Room, Location_x, Location_y, BSSID, Frequency, Level):    
-	with open('userinput.csv', 'a', newline='') as csvfile: 
-		spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+def addCSV(Building, Room, Location_x, Location_y, BSSID, Frequency, Level, Model, Time):    
+	with open('userinput.csv', 'a', newline='') as csvfile: 		
 		if not os.path.getsize('./userinput.csv'): 
-			spamwriter.writerow(['Building', 'Room', 'Location_x', 'Location_y', 'BSSID', 'Frequency', 'Level'])
+			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+			spamwriter.writerow(['Building', 'Room', 'Location_x', 'Location_y', 'BSSID', 'Frequency', 'Level', 'Model', 'Time'])
 		
 		data = ([
-		Building, Room, Location_x, Location_y, BSSID, Frequency, Level
+		Building, Room, Location_x, Location_y, BSSID, Frequency, Level, Model, Time
 		])
+
+		spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
 		spamwriter.writerow(data)
 			
 def deleteDB():
@@ -75,20 +78,22 @@ def initializeTempList():
 		reader = csv.reader(csvfile)
 		APs = [row[0] for row in reader]
 		APlength = len(APs)
-		lists = [[0 for col in range(3)] for row in range(APlength)]
+		lists = [[0 for col in range(5)] for row in range(APlength)]
 		row = 0
 		for AP in APs:
 			lists[row][0] = AP
 			lists[row][1] = '-110'
-			lists[row][2] = 'location'
+			lists[row][2] = 'none'
+			lists[row][3] = 'none'
+			lists[row][4] = 'none'
 			row += 1
 
 	with open('tempList.csv', 'w', newline='') as csvfile: 
 		spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
-		spamwriter.writerow([ 'Room', 'BSSID',  'Level'])
+		spamwriter.writerow([ 'Room', 'BSSID',  'Level', 'Model', 'Time'])
 		for i in range(0,200): 
 			data = ([
-			lists[i][0], lists[i][1], lists[i][2]
+			lists[i][0], lists[i][1], lists[i][2], lists[i][3], lists[i][4]
 			])
 			spamwriter.writerow(data)
 		
@@ -101,7 +106,7 @@ def checkAP(list, AP):
 			return row      
 	return 'none'           
 
-def tempList(BSSID, Level, Room): 
+def tempList(BSSID, Level, Room, Model, Time): 
 	with open('tempList.csv', 'r', newline='') as csvfile: 
 		reader = csv.reader(csvfile)
 		RSS = [row for row in reader]
@@ -110,57 +115,64 @@ def tempList(BSSID, Level, Room):
 			if  RSS[row][0] == BSSID :
 				RSS[row][1] = Level     
 				RSS[row][2] = Room
+				RSS[row][3] = Model
+				RSS[row][4] = Time
 				
 				with open('tempList.csv', 'w', newline='') as csvfile: 
 					spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
-					spamwriter.writerow(['BSSID', 'Level', 'Room'])             
+					spamwriter.writerow(['BSSID', 'Level', 'Room', 'Model', 'Time'])             
 					for i in range(1,201):
 						data = ([
-						RSS[i][0], RSS[i][1], RSS[i][2]
+						RSS[i][0], RSS[i][1], RSS[i][2], RSS[i][3], RSS[i][4]
 						])
 						spamwriter.writerow(data)
 				break
 	
 def isEmpty():
-	with open('xxx.csv', 'a+', newline='') as csvfile:  #Check is tempList is empty
-		spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+	with open('xxx.csv', 'a+', newline='') as csvfile:  #Check is tempList is empty	
 		if not os.path.getsize('./xxx.csv'):        #file not established
-			spamwriter.writerow(['BSSID',  'Level', 'Room'])
+			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+			spamwriter.writerow(['BSSID',  'Level', 'Room', 'Model', 'Time'])
 	
 	with open('mapping.csv', 'r', newline='') as csvfile:  
 		reader = csv.reader(csvfile)
 		APs = [row[0] for row in reader]
 		APlength = len(APs)
-		lists = [[0 for col in range(3)] for row in range(APlength)]
+		lists = [[0 for col in range(5)] for row in range(APlength)]
 		row = 0
 		for AP in APs:
 			lists[row][0] = AP
 			lists[row][1] = '-110'
-			lists[row][2] = 'location'
+			lists[row][2] = 'none'
+			lists[row][3] = 'none'
+			lists[row][4] = 'none'
 			row += 1
 	
-	with open('tempList.csv', 'a+', newline='') as csvfile:     #Check is tempList is empty
-		spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+	with open('tempList.csv', 'a+', newline='') as csvfile:     #Check is tempList is empty	
 		if not os.path.getsize('./tempList.csv'):       #file is empty
-			spamwriter.writerow(['BSSID',  'Level', 'Room'])
+			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+			spamwriter.writerow(['BSSID',  'Level', 'Room', 'Model', 'Time'])
 			for i in range(0,200): 
 				data = ([
-				 lists[i][0], lists[i][1], lists[i][2]
+				 lists[i][0], lists[i][1], lists[i][2], lists[i][3], lists[i][4]
 				])
 				spamwriter.writerow(data)
 	
-def refreshCSV(Room):
+def refreshCSV(Room,Model,Time):
 	with open('tempList.csv', 'r', newline='') as csvfile: 
 		reader = csv.reader(csvfile)
 		RSS = [row for row in reader]
 		
 		with open('tempList.csv', 'w', newline='') as csvfile: 
 			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
-			spamwriter.writerow(['BSSID',  'Level', 'Room'])
+			spamwriter.writerow(['BSSID',  'Level', 'Room', 'Model', 'Time'])
 			for row in range(1,201):
 				RSS[row][2] = Room
+				RSS[row][3] = Model
+				RSS[row][4] = Time
+
 				room = ([
-					RSS[row][0], RSS[row][1], RSS[row][2]
+					RSS[row][0], RSS[row][1], RSS[row][2], RSS[row][3], RSS[row][4]
 					])
 				spamwriter.writerow(room)
 		
@@ -169,19 +181,20 @@ def refreshCSV(Room):
 								
 			for i in range(1,201):
 				data = ([
-				RSS[i][0], RSS[i][1], RSS[i][2]
+				RSS[i][0], RSS[i][1], RSS[i][2], RSS[i][3], RSS[i][4]
 				])
 				spamwriter.writerow(data)
 		
-		with open('oneTime.csv', 'a', newline='') as csvfile: 
-			spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+		with open('oneTime.csv', 'a', newline='') as csvfile: 			
 			if not os.path.getsize('./oneTime.csv'):        #file is empty
-				spamwriter.writerow(['BSSID',  'Level', 'Room'])    
+				spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+				spamwriter.writerow(['BSSID',  'Level', 'Room', 'Model', 'Time'])    
 			
 			for i in range(1,201):
 				data = ([
-				RSS[i][0], RSS[i][1], RSS[i][2]
+				RSS[i][0], RSS[i][1], RSS[i][2], RSS[i][3], RSS[i][4]
 				])
+				spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
 				spamwriter.writerow(data)
 				
 	
@@ -197,12 +210,15 @@ def post():
 	BSSID = request.form['BSSID']
 	Frequency = request.form['Frequency']
 	Level = request.form['Level']
-	Down = request.form['Down?']
+	Model = request.form['Model']
+	Time = request.form['Time']
+
+	Done = request.form['Done']
 	
-	tempList(BSSID, Level, Room)
+	tempList(BSSID, Level, Room, Model, Time)
 	
-	if Down == 'YES':
-		refreshCSV(Room)		
+	if Done == 'YES':
+		refreshCSV(Room,Model,Time)		
 		initializeTempList()
 		print('YES')
 	else:

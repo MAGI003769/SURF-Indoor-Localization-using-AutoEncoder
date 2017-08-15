@@ -10,7 +10,8 @@ class User(db.Model):
 	BSSID = db.Column(db.String(20), index=True, unique=False)
 	Frequency = db.Column(db.String(10), index=True, unique=False)
 	Level = db.Column(db.String(10), index=True, unique=False)
-	
+	Model = db.Column(db.String(10), index=True, unique=False)
+	Time  = db.Column(db.String(10), index=True, unique=False)
 	def __repr__(self):
 		return '<User %r>' % (self.id)
 
