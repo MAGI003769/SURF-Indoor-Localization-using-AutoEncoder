@@ -264,3 +264,7 @@ We simply collected the signal samples from 7 different locations on 4th floor o
 
 ### 12th Aug:
 The accuracy at location 2 is still barely satisfactory, whereas, after fixing the problem with "detection delay", the overall accuracy has a significant improvement. We have gotten rid of the problem that might occur when transfering from a location to another.
+
+### 15th Aug:
+Today, we used oppo cellphone to collect some data as testing set and fed it into the model trained by dataset which is collected by Xiaomi. The testing result was not bad, which is over 90%. 
+![oppo_testing](img/test_oppo_on_xiaomi_model.PNG)
