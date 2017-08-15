@@ -345,7 +345,8 @@ def post():
 	return '[-1]'
 if __name__ == "__main__":
 	#app.run(host='0.0.0.0', debug=False)
-	app.run(host='192.168.43.222', debug=True)
+	#app.run(host='192.168.43.202', debug=True)
+	app.run(host='10.8.222.33', debug=True)
 	
 
 

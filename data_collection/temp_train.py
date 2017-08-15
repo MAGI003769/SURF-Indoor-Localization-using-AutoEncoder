@@ -167,6 +167,7 @@ with tf.Session() as session:
     plot_epoch = []
     plot_train_acc = []
     plot_val_acc = []
+    #plot_test_acc = []
     for epoch in range(training_epochs):
         epoch_costs = np.empty(0)
         for b in range(total_batches):
@@ -177,6 +178,7 @@ with tf.Session() as session:
             epoch_costs = np.append(epoch_costs,c)
         plot_train_acc.append(session.run(accuracy, feed_dict={X: train_x, Y: train_y}))
         plot_val_acc.append(session.run(accuracy, feed_dict={X: val_x, Y: val_y}))
+        #plot_test_acc.append(session.run(accuracy, feed_dict={X: test_features, Y: test_labels}))
         print ("Epoch: ",epoch," Loss: ",np.mean(epoch_costs)," Training Accuracy: ", \
             session.run(accuracy, feed_dict={X: train_x, Y: train_y}), \
             "Validation Accuracy:", session.run(accuracy, feed_dict={X: val_x, Y: val_y}))
@@ -196,10 +198,12 @@ with tf.Session() as session:
     
     plot1, = plt.plot(plot_epoch, plot_train_acc, '-r')
     plot2, = plt.plot(plot_epoch, plot_val_acc, '-b')
-    plt.title('Training and Validation Accuracy')
+    #plot3, = plt.plot(plot_epoch, plot_val_acc, '-k')
+    plt.title('Accuracy')
     plt.xlabel('Epoch')
     plt.legend([plot1, plot2], ['Training Accuracy', 'Validation Accuracy'])
     plt.grid()
+    #plt.ylim([0.8, 1])
     plt.show()
 
     print ("\nTesting Accuracy:", session.run(accuracy, feed_dict={X: test_features, Y: test_labels}))
