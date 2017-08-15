@@ -22,6 +22,7 @@ import java.util.Map;
  */
 
 public class BackgroundTask extends AsyncTask<String, String, String>{
+
     public static String submitPostData(Map<String, String> params, String encode) throws MalformedURLException {
         /**
          * 发送POST请求到服务器并返回服务器信息
@@ -30,8 +31,8 @@ public class BackgroundTask extends AsyncTask<String, String, String>{
          * @return 服务器返回信息
          */
         byte[] data = getRequestData(params, encode).toString().getBytes();
-        //URL url = new URL("http://127.0.0.1:5000");
-        URL url = new URL("http://192.168.43.222:5000");
+        URL url = new URL("http://10.8.222.33:5000");
+        //URL url = new URL("http://192.168.43.222:5000");
 
         HttpURLConnection httpURLConnection = null;
         try{
@@ -63,7 +64,6 @@ public class BackgroundTask extends AsyncTask<String, String, String>{
 
         } catch (IOException e) {
             e.printStackTrace();
-            return "Fail";
         } finally {
             httpURLConnection.disconnect();
             return "Success";
@@ -136,24 +136,28 @@ public class BackgroundTask extends AsyncTask<String, String, String>{
         if (method.equals("register")) {
             //String login_url = "http://192.168.43.222ebapp/login.php";
             String[] arrays = list.split(",");
-            int aps = arrays.length / 8;
+            int aps = arrays.length / 10;
             String post_result = null;
 
             for (int i = 0; i < aps; i++) {
                 Map<String, String> param = new HashMap<String, String>();
 
-                param.put("Building", arrays[8 * i]);
-                param.put("Room", arrays[8 * i + 1]);
-                param.put("Location_x", arrays[8 * i + 2]);
-                param.put("Location_y", arrays[8 * i + 3]);
-                param.put("SSID", arrays[8 * i + 4]);
-                param.put("BSSID", arrays[8 * i + 5]);
-                param.put("Frequency", arrays[8 * i + 6]);
-                param.put("Level", arrays[8 * i + 7]);
+                param.put("Building", arrays[10 * i]);
+                param.put("Room", arrays[10 * i + 1]);
+                param.put("Location_x", arrays[10 * i + 2]);
+                param.put("Location_y", arrays[10 * i + 3]);
+                param.put("SSID", arrays[10 * i + 4]);
+                param.put("BSSID", arrays[10 * i + 5]);
+                param.put("Frequency", arrays[10 * i + 6]);
+                param.put("Level", arrays[10 * i + 7]);
+                param.put("Model", arrays[10 * i + 8]);
+                param.put("Time", arrays[10 * i + 9]);
+
+                // The last signal
                 if (i != aps - 1) {
-                    param.put("Down?", "NO");
+                    param.put("Done", "NO");
                 } else {
-                    param.put("Down?", "YES");
+                    param.put("Done", "YES");
                 }
                 try {
                     post_result = submitPostData(param, "utf-8");
@@ -167,13 +171,22 @@ public class BackgroundTask extends AsyncTask<String, String, String>{
         return null;
     }
 
+
     @Override
     protected void onPostExecute(String Results) {
-        alertDialog = new AlertDialog.Builder(ctx).create();
-        alertDialog.setTitle(Results);
-        //super.onPostExecute(s);
+        //Toast.makeText(getApplicationContext(), "You're in : "+ Results, 1).show();
+        super.onPostExecute(Results);
+        returnLoc(Results);
+       // Log.i(onPostExecute("String Results)", Results);
+        //alertDialog = new AlertDialog.Builder(ctx).create();
+        //alertDialog.setTitle(Results);
+        //textView.setText("You'r in:" + Results);
+
     }
 
+    private String returnLoc(String loc) {
+        return loc;
+    }
 
     @Override
     protected void onProgressUpdate(String... values) {
@@ -184,4 +197,5 @@ public class BackgroundTask extends AsyncTask<String, String, String>{
     protected void onCancelled() {
         super.onCancelled();
     }
+
 }
