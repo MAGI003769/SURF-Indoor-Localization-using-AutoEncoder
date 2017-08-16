@@ -3,6 +3,8 @@ from flask import Flask, request
 from app import db, models
 import csv
 import os #to get current path
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import importlib
 
 from model import *
@@ -16,6 +18,7 @@ import matplotlib.pyplot as plt
 
 PYTHONIOENCODING="UTF-8"  #set the utf-8 encode mode
 
+room_dic = {'0': 'the front of elevators', '1': 'Male Toilet', '2': 'Southern space', '3': 'Northern Space', '4': 'EE411', '5': 'EE405', '6': 'EE420'}
 	
 # create the application object
 app = Flask(__name__)
@@ -113,8 +116,8 @@ def run_model(user_input):
 		session.run(init_op)
 		saver = tf.train.Saver()
 		saver.restore(session, ".\\trained_model\\trained_model.ckpt")
-		print(session.run(y_, {X: user_input}))
-		print(session.run(room, {X: user_input}))
+		#print(session.run(y_, {X: user_input}))
+		#print(session.run(room, {X: user_input}))
 		return session.run(room, {X: user_input})
 
 
@@ -329,11 +332,15 @@ def post():
 		user_input = scale(user_input, axis=1)
 		location = run_model(user_input)
 		
-		print('Location:', type(location))
+		#print('Location:', type(location))
 		
 		initializeTempList()
 		
-		return str(location)
+		print('\n=====================================================\n')
+		print('\tYou are now at ', room_dic[str(location[0])])
+		print('\n=====================================================\n')
+		
+		return str(location[0])
 	#addAPs(list)
 	#addAllCSV()
 	#addAPs(Building, Room, Location_x, Location_y, SSID,BSSID, Frequency, Level)
