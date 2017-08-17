@@ -344,8 +344,8 @@ def post():
 
 	return '[-1]'
 if __name__ == "__main__":
-	#app.run(host='0.0.0.0', debug=False)
-	app.run(host='192.168.43.222', debug=True)
+	app.run(host='0.0.0.0', debug=False) # 获取来自所有网络的信息
+	#app.run(host='192.168.43.222', debug=True)
 	
 
 
