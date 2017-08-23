@@ -267,4 +267,7 @@ The accuracy at location 2 is still barely satisfactory, whereas, after fixing t
 
 ### 15th Aug:
 Today, we used oppo cellphone to collect some data as testing set and fed it into the model trained by dataset which is collected by Xiaomi. The testing result was not bad, which is over 90%. 
+![oppo_testing](img/SAE_loss_0815.png)
+![oppo_testing](img/Classifier_loss_0815.png)
+![oppo_testing](img/acc_0815.png)
 ![oppo_testing](img/test_oppo_on_xiaomi_model.PNG)
