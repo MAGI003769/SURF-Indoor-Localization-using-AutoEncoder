@@ -137,7 +137,7 @@ with tf.Session() as session:
     # ------------ 1. Training Autoencoders - Unsupervised Learning ----------- #
     plot_loss = []
     plot_epoch = []
-    for epoch in range(training_epochs*9):
+    for epoch in range(training_epochs*8):
         epoch_costs = np.empty(0)
         for b in range(total_batches):
             offset = (b * batch_size) % (features.shape[0] - batch_size)
@@ -199,9 +199,9 @@ with tf.Session() as session:
     plot1, = plt.plot(plot_epoch, plot_train_acc, '-r')
     plot2, = plt.plot(plot_epoch, plot_val_acc, '-b')
     plot3, = plt.plot(plot_epoch, plot_test_acc, '-k')
-    plt.title('Accuracy')
+    plt.title('Accuracy when using our own data')
     plt.xlabel('Epoch')
-    plt.legend([plot1, plot2], ['Training Accuracy', 'Validation Accuracy'])
+    plt.legend([plot1, plot2, plot3], ['Training Accuracy', 'Validation Accuracy', 'Testing Accuracy'])
     plt.grid()
     #plt.ylim([0.8, 1])
     plt.show()
