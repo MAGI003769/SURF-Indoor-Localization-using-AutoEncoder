@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import scale
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 dataset = pd.read_csv("train_set.csv",header = 0)
 features = np.asarray(dataset.ix[:,1:201])
@@ -12,7 +13,7 @@ labels = np.asarray(pd.get_dummies(labels))
 
 print(labels.shape)
 
-train_val_split = np.random.rand(len(features)) < 0.90
+train_val_split = np.random.rand(len(features)) < 0.80
 train_x = features[train_val_split]
 train_y = labels[train_val_split]
 val_x = features[~train_val_split]
@@ -137,7 +138,7 @@ with tf.Session() as session:
     # ------------ 1. Training Autoencoders - Unsupervised Learning ----------- #
     plot_loss = []
     plot_epoch = []
-    for epoch in range(training_epochs*8):
+    for epoch in range(training_epochs*5):
         epoch_costs = np.empty(0)
         for b in range(total_batches):
             offset = (b * batch_size) % (features.shape[0] - batch_size)
@@ -154,12 +155,14 @@ with tf.Session() as session:
     #for i in range(batch_x[0].shape[0]):
         #print('[batch_x reconstruction]:', batch_x[0][i], session.run(decoded[0][i], feed_dict={X: batch_x}))
 
+    f = plt.figure()
     plt.plot(plot_epoch, plot_loss, 'k-')
     plt.title('AutoEncoder Loss per Generation')
     plt.xlabel('Generation')
     plt.ylabel('AutoEncoder Loss')
     plt.grid()
     plt.show()
+    f.savefig("encoder_loss.pdf", bbox_inches='tight')
 
     
     # ---------------- 2. Training NN - Supervised Learning ------------------ #
@@ -178,7 +181,7 @@ with tf.Session() as session:
             epoch_costs = np.append(epoch_costs,c)
         plot_train_acc.append(session.run(accuracy, feed_dict={X: train_x, Y: train_y}))
         plot_val_acc.append(session.run(accuracy, feed_dict={X: val_x, Y: val_y}))
-        plot_test_acc.append(session.run(accuracy, feed_dict={X: test_features, Y: test_labels}))
+        #plot_test_acc.append(session.run(accuracy, feed_dict={X: test_features, Y: test_labels}))
         print ("Epoch: ",epoch," Loss: ",np.mean(epoch_costs)," Training Accuracy: ", \
             session.run(accuracy, feed_dict={X: train_x, Y: train_y}), \
             "Validation Accuracy:", session.run(accuracy, feed_dict={X: val_x, Y: val_y}))
@@ -189,22 +192,29 @@ with tf.Session() as session:
 
     save_path = saver.save(session, model_path)
 
+    f = plt.figure()
+    plt.clf()
     plt.plot(plot_epoch, plot_loss, 'k-')
     plt.title('Classifier Loss per Epoch')
     plt.xlabel('Epoch')
     plt.ylabel('Classifier Loss')
     plt.grid()
     plt.show()
+    f.savefig("classifier_loss.pdf", bbox_inches='tight')
     
+    f = plt.figure()
+    plt.clf()
     plot1, = plt.plot(plot_epoch, plot_train_acc, '-r')
     plot2, = plt.plot(plot_epoch, plot_val_acc, '-b')
-    plot3, = plt.plot(plot_epoch, plot_test_acc, '-k')
-    plt.title('Accuracy when using our own data')
+    #plot3, = plt.plot(plot_epoch, plot_test_acc, '-k')
+    #plt.title('Accuracy when using our own data')
     plt.xlabel('Epoch')
-    plt.legend([plot1, plot2, plot3], ['Training Accuracy', 'Validation Accuracy', 'Testing Accuracy'])
+    plt.ylabel('Accuracy')
+    plt.legend([plot1, plot2], ['Training Accuracy', 'Validation Accuracy'])
     plt.grid()
-    #plt.ylim([0.8, 1])
     plt.show()
+    f.savefig("accuracy.pdf", bbox_inches='tight')
 
-    print ("\nTesting Accuracy:", session.run(accuracy, feed_dict={X: test_features, Y: test_labels}))
-    print (session.run(tf.argmax(y_,1), feed_dict={X: test_features, Y: test_labels}))
+    for i in range(5):
+        print ("\nTesting Accuracy:", session.run(accuracy, feed_dict={X: test_features, Y: test_labels}))
+    #print (session.run(tf.argmax(y_,1), feed_dict={X: test_features, Y: test_labels}))

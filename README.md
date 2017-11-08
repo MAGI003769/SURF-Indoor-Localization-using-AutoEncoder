@@ -7,7 +7,7 @@ Hope this summer can be cool. </br>
 
 The main idea is from [Low-effort place recognition with WiFi fingerprints using deep learning](https://arxiv.org/abs/1611.02049) and the implementation based on this [repo](https://github.com/aqibsaeed/Place-Recognition-using-Autoencoders-and-NN) with slight modifications. 
 
-Thanks for contribution from my groupmates [@ZzhKlaus](https://github.com/ZzhKlaus) and [@ZikunAbrahamTan](https://github.com/ZikunAbrahamTan) who are really brilliant and respectively take in charge of coding in server part and android app for client.  
+Thanks for contribution from my teammates [@ZzhKlaus](https://github.com/ZzhKlaus) and [@ZikunAbrahamTan](https://github.com/ZikunAbrahamTan) who are really brilliant and respectively take in charge of coding in server part and android app for client.  As all of us are undergraduate students, from the aspects of innovation, completion and profession, you may find the level of this project is  possibly much lower than you expected. Thus, if you find any mistake, I'm sorry about that and appreciate your comments. If this our work really helps yours, I'm very glad to see that. 
 
 ## Folders:
 - algorithm: holding relevant code for offline
@@ -271,3 +271,8 @@ Today, we used oppo cellphone to collect some data as testing set and fed it int
 ![oppo_testing](img/Classifier_loss_0815.png)
 ![oppo_testing](img/acc_0815.png)
 ![oppo_testing](img/test_oppo_on_xiaomi_model.PNG)
+
+## Poster:
+
+The poster that summarizes our work is [here](Poster.pdf).
+
